@@ -212,9 +212,19 @@ AND ICount = ? AND CategoryID = ? ",[$request->input('Mark'),$request->input('Mo
         $buyers = DB::select("SELECT * FROM buyers as b");
         $arr = [];
         foreach ($buyers as $b){
-            $arr[$b->BuyerID] = DB::select("SELECT * FROM purchases as p INNER JOIN phones as ph ON ph.ID=p.PhoneID WHERE BuyerID=? AND Delivered=false", [$b->BuyerID]);
+            $arr[$b->BuyerID] = DB::select("SELECT *,p.ID AS PurchID FROM purchases as p  INNER JOIN phones as ph ON ph.ID=p.PhoneID WHERE BuyerID=? AND Delivered=false", [$b->BuyerID]);
         }
 //        dd($arr);
         return view('orders', ['buyers' => $buyers, 'purchases' => $arr]);
+    }
+    public function ordersUpdate($id, Request $request){
+        if($request->input('Submit')=='on')$Submit = true;
+            else $Submit = false;
+        if($request->input('Send')=='on')$Send = true;
+            else $Send = false;
+        if($request->input('Delivered')=='on')$Delivered = true;
+            else $Delivered = false;
+        DB::update("UPDATE purchases SET Submit = ?, Send = ?, Delivered = ? WHERE ID = ? ",[$Send,$Submit,$Delivered,$id]);
+        return redirect()->route('ordersPage');
     }
 }

@@ -24,6 +24,7 @@ Route::match(['get', 'post'], 'register', function(){
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/add', [App\Http\Controllers\MainController::class, 'add'])->name('AddPage');
     Route::post('/add', [App\Http\Controllers\MainController::class, 'addPhoneSubmit'])->name('addPhone');
@@ -34,7 +35,9 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::post('/chagePhone/{id}/submit',[\App\Http\Controllers\MainController::class,'updatePhone'])->name('updatePhone');
     Route::get('/changePhone/delete/{id}',[\App\Http\Controllers\MainController::class, 'deletePhone'])->name('deletePhone');
     Route::get('/orders',[\App\Http\Controllers\MainController::class,'ordersPage'])->name('ordersPage');
+    Route::post('/orders/update/{id}',[\App\Http\Controllers\MainController::class, 'ordersUpdate'])->name('OrdersUpdate');
 });
+
 Route::post('/searchResult', [App\Http\Controllers\MainController::class, 'search'])->name('Search');
 Route::get('/about', [App\Http\Controllers\MainController::class, 'about'])->name('aboutPage');
 Route::post('/about', [App\Http\Controllers\MainController::class, 'report'])->name('addReport');
