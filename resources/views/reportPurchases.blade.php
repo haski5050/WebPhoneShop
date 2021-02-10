@@ -6,6 +6,21 @@
     @isset($in)
         <div id="print-content">
         <div class="col-12 text-center">
+            <div class="noprint">
+                <br>
+                <h3 class="text-center">Вибірка за датою</h3>
+                <form method="post" action="{{route('reportsDate')}}">
+                    @csrf
+                    <label for="frst">Від</label>
+                    <input type="date" name="frst">
+
+                    <label for="scnd">До</label>
+                    <input type="date" name="scnd">
+                    <button type="submit">Знайти</button>
+                </form>
+                <br>
+                <br>
+            </div>
         <h3>Рейтинг продажу</h3>
         </div>
 
@@ -31,10 +46,12 @@
             @endforeach
             </tbody>
         </table>
+            @isset($ls)
         <div>
             <br>
-            <h3 class="text-center">Смартфони які не продаються</h3>
+            <h3 class="text-center">Смартфони які не користуються попитом</h3>
         </div>
+
         <table class="table">
             <thead>
             <tr>
@@ -55,6 +72,7 @@
             @endforeach
             </tbody>
         </table>
+            @endisset
         </div>
         <a class="btn btn-outline-success noprint" onclick="window.print()">Друк</a>
     @else

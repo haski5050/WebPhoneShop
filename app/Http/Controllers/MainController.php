@@ -124,8 +124,8 @@ AND ICount = ? AND CategoryID = ? ",[$request->input('Mark'),$request->input('Mo
 
         return view('category',['categories' =>$category]);
     }
-    public function categorySelect(Request $request){
-        $categoryId = $request->input('categoryId');
+    public function categorySelect($id,Request $request){
+        $categoryId = $id;
         $phones = DB::select("SELECT * FROM phones LEFT JOIN images ON images.PhoneID = phones.ID WHERE phones.CategoryID=?",[$categoryId]);
         return view('main',['dbInfo' => $phones]);
     }
@@ -212,7 +212,6 @@ $re = DB::select("SELECT * FROM buyers as b INNER JOIN purchases as p ON p.Buyer
         foreach ($buyers as $b){
             $arr[$b->BuyerID] = DB::select("SELECT *,p.ID AS PurchID FROM purchases as p  INNER JOIN phones as ph ON ph.ID=p.PhoneID WHERE BuyerID=? AND Delivered=false", [$b->BuyerID]);
         }
-
         return view('orders', ['buyers' => $buyers, 'purchases' => $arr]);
     }
     public function ordersUpdate($id, Request $request){
@@ -230,5 +229,10 @@ $re = DB::select("SELECT * FROM buyers as b INNER JOIN purchases as p ON p.Buyer
         $last = DB::select("SELECT phones.* FROM phones LEFT JOIN purchases ON purchases.PhoneID = phones.ID WHERE purchases.PhoneID IS NULL");
 
         return view('reportPurchases',['in'=>$mostP,'ls'=>$last]);
+    }
+    public function reportsDate(Request $request){
+        $tmp = DB::select("SELECT max(Pdate) AS dt, SUM(Total) AS money, COUNT(p.PhoneID) AS pmax, ph.* FROM purchases AS p LEFT JOIN phones AS ph ON ph.ID = p.PhoneID WHERE Pdate BETWEEN ? AND ? GROUP BY p.PhoneID ORDER BY pmax DESC",[$request->input('frst'),$request->input('scnd')]);
+
+        return view('reportPurchases',['in'=>$tmp,'ls'=>NULL]);
     }
 }

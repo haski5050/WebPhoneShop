@@ -37,6 +37,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/orders',[\App\Http\Controllers\MainController::class,'ordersPage'])->name('ordersPage');
     Route::post('/orders/update/{id}',[\App\Http\Controllers\MainController::class, 'ordersUpdate'])->name('OrdersUpdate');
     Route::get('report/purchases',[\App\Http\Controllers\MainController::class,'reportsPurchases'])->name('reportsPurchases');
+    Route::post('report/purchases',[\App\Http\Controllers\MainController::class,'reportsDate'])->name('reportsDate');
 });
 
 Route::post('/searchResult', [App\Http\Controllers\MainController::class, 'search'])->name('Search');
@@ -46,10 +47,10 @@ Route::post('/about', [App\Http\Controllers\MainController::class, 'report'])->n
 
 
 Route::get('/category', [App\Http\Controllers\MainController::class, 'category'])->name('categoryPage');
-Route::post('/', [App\Http\Controllers\MainController::class, 'categorySelect'])->name('categorySelect');
+//Route::post('/', [App\Http\Controllers\MainController::class, 'categorySelect'])->name('categorySelect');
 Route::get('/aboutPhone/{id}', [App\Http\Controllers\MainController::class, 'aboutPhone'])->name('aboutPhone');
 Route::get('/basket',[\App\Http\Controllers\CookieController::class,'showCookie'])->name('basketPage');
-
+Route::get('/category/{id}', [App\Http\Controllers\MainController::class, 'categorySelect'])->name('categorySelect');
 
 Route::post('/aboutPhone/{id}/addToBasket',[\App\Http\Controllers\CookieController::class, 'addToBasket'])->name('addToBasket');
 Route::get('/basket/delete/{id}',[\App\Http\Controllers\CookieController::class, 'deleteBasket'])->name('deleteBasketItem');
