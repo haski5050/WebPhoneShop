@@ -69,7 +69,7 @@ class CookieController extends Controller {
         }
         if($tmp) {
             Log::info('count error');
-            echo "<script>alert('Кількість товару більша ніж в наявності!')</script>";
+            echo "<script>window.alert('Кількість товару в корзині більше ніж в наявності!')</script>";
         }
         else {
             $validator = Validator::make($request->all(), [
@@ -92,8 +92,9 @@ class CookieController extends Controller {
             }
             $BID = DB::select("SELECT BuyerID FROM buyers WHERE PIB = ? AND Age = ? AND PhoneNumber = ? AND Address = ?", [$request->input('PIB'), $request->input('Age'), $request->input('PhoneNumber'), $request->input('Address')])[0]->BuyerID;
             foreach ($frst as $el) {
-                DB::insert("INSERT INTO purchases(BuyerID, PhoneID, Total) VALUES(?,?,?)", [$BID, $el->ID, $el->Price]);
+                for ($i=0;$i<$el->bcount;$i++) DB::insert("INSERT INTO purchases(BuyerID, PhoneID, Total) VALUES(?,?,?)", [$BID, $el->ID, $el->Price]);
             }
+            DB::delete("DELETE FROM basket WHERE ID =?",[$request->cookie('id')]);
         }
         return redirect()->route('MainPage');
     }

@@ -12,6 +12,9 @@
                     <p class="card-text">{{substr($el->ShortDescription,0,100)}}..</p>
                     <h3 class="card-title" style="color: #2a9055">{{$el->Price}} грн</h3>
                     <a href="#" class="btn btn-primary">Детальніше</a>
+                    @auth()
+                        <a href="{{route('changePhone',['id'=>$el->ID])}}" class="btn btn-success">Редагувати</a>
+                    @endauth
                 </div>
             </div>
         @endforeach

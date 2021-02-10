@@ -36,6 +36,7 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/changePhone/delete/{id}',[\App\Http\Controllers\MainController::class, 'deletePhone'])->name('deletePhone');
     Route::get('/orders',[\App\Http\Controllers\MainController::class,'ordersPage'])->name('ordersPage');
     Route::post('/orders/update/{id}',[\App\Http\Controllers\MainController::class, 'ordersUpdate'])->name('OrdersUpdate');
+    Route::get('report/purchases',[\App\Http\Controllers\MainController::class,'reportsPurchases'])->name('reportsPurchases');
 });
 
 Route::post('/searchResult', [App\Http\Controllers\MainController::class, 'search'])->name('Search');

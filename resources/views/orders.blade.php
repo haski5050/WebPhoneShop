@@ -27,6 +27,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Товар</th>
                                     <th scope="col">Ціна</th>
+                                    <th scope="col">Дата</th>
                                     <th scope="col">Підтверджено</th>
                                     <th scope="col">Відправлено</th>
                                     <th scope="col">Доставлено</th>
@@ -39,6 +40,7 @@
                                         <th scope="row">{{ $o->PurchID }}</th>
                                         <td><a href="">{{ $o->Mark." ".$o->Model }}</a></td>
                                         <td>{{$o->Total}}</td>
+                                        <td>{{$o->Pdate}}</td>
                                         <form method="post" action="{{route('OrdersUpdate',[$o->PurchID])}}">
                                             @csrf
                                         <td>

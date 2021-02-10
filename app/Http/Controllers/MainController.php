@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 class MainController extends Controller
 {
     public function main(){
-        $phones = DB::select("SELECT * FROM phones LEFT JOIN images ON images.PhoneID = phones.ID");
+        $phones = DB::select("SELECT * FROM phones LEFT JOIN images ON images.PhoneID = phones.ID ORDER BY phones.ID DESC");
 
         return view('main',['dbInfo' => $phones]);
     }
@@ -205,16 +205,14 @@ AND ICount = ? AND CategoryID = ? ",[$request->input('Mark'),$request->input('Mo
         return redirect()->route('MainPage');
     }
     public function ordersPage(){
-//        $orders = DB::select("SELECT * FROM purchases WHERE Submit = NULL OR Send = NULL OR Delivered = NULL");
-//        $buyers = DB::select("SELECT buyer.PIB AS bPIB, buyer.PhoneNumber AS bPhone, buyer.Address AS bAddress, phones.* INNER JOIN  ");
-        $re = DB::select("SELECT * FROM buyers as b INNER JOIN purchases as p ON p.BuyerID=b.BuyerID INNER JOIN phones as ph ON ph.ID=p.PhoneID");
-//        dd($re);
+$re = DB::select("SELECT * FROM buyers as b INNER JOIN purchases as p ON p.BuyerID=b.BuyerID INNER JOIN phones as ph ON ph.ID=p.PhoneID");
+
         $buyers = DB::select("SELECT * FROM buyers as b");
         $arr = [];
         foreach ($buyers as $b){
             $arr[$b->BuyerID] = DB::select("SELECT *,p.ID AS PurchID FROM purchases as p  INNER JOIN phones as ph ON ph.ID=p.PhoneID WHERE BuyerID=? AND Delivered=false", [$b->BuyerID]);
         }
-//        dd($arr);
+
         return view('orders', ['buyers' => $buyers, 'purchases' => $arr]);
     }
     public function ordersUpdate($id, Request $request){
@@ -226,5 +224,11 @@ AND ICount = ? AND CategoryID = ? ",[$request->input('Mark'),$request->input('Mo
             else $Delivered = false;
         DB::update("UPDATE purchases SET Submit = ?, Send = ?, Delivered = ? WHERE ID = ? ",[$Send,$Submit,$Delivered,$id]);
         return redirect()->route('ordersPage');
+    }
+    public function reportsPurchases(){
+        $mostP = DB::select("SELECT max(Pdate) AS dt, SUM(Total) AS money, COUNT(p.PhoneID) AS pmax, ph.* FROM purchases AS p LEFT JOIN phones AS ph ON ph.ID = p.PhoneID GROUP BY p.PhoneID ORDER BY pmax DESC");
+        $last = DB::select("SELECT phones.* FROM phones LEFT JOIN purchases ON purchases.PhoneID = phones.ID WHERE purchases.PhoneID IS NULL");
+
+        return view('reportPurchases',['in'=>$mostP,'ls'=>$last]);
     }
 }

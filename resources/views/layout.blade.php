@@ -10,7 +10,7 @@
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark noprint">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('MainPage') }}">Головна</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,11 +38,15 @@
 </nav>
 <div class="container" style="margin-top: 5rem !important;">@yield('content')</div>
 @auth()
-    <div class="admin align-items-center">
+    <div class="admin align-items-center noprint">
         <a href="/" class="btn btn-success">Головна</a>
+        <div id="adminbtn">
         <a href="{{route('AddPage')}}" class="btn btn-success">Додати телефон</a>
         <a href="{{route('AddctPage')}}" class="btn btn-success">Додати категорію</a>
+        <a href="{{route('ordersPage')}}" class="btn btn-success">Переглянути замовлення</a>
+        <a href="{{route('reportsPurchases')}}" class="btn btn-success">Звітність покупок</a>
         <a href="{{route('reportsPage')}}" class="btn btn-success">Переглянути відгуки</a>
+        </div>
         <a href="{{ route('logout') }}" class="btn btn-outline-danger btn-sm">Вийти</a>
     </div>
 @endauth
@@ -58,7 +62,13 @@
         width: min-content;
 
     }
+    .admin #adminbtn{
+        display: none;
 
+    }
+    .admin:hover #adminbtn{
+        display: block;
+    }
     .admin a{
         display: block;
         margin-top: 3px;
