@@ -48,7 +48,7 @@ class MainController extends Controller
             'Flash' => 'required|max:100',
             'Battery' => 'required|max:100',
             'LongDescription' => 'nullable',
-            'ShortDescription' => 'nullable|max:256',
+            'ShortDescription' => 'nullable',
             'Price' => 'required',
             'Count' => 'required',
             'CategoryID' => 'required',
@@ -162,7 +162,7 @@ AND ICount = ? AND CategoryID = ? ",[$request->input('Mark'),$request->input('Mo
             'Flash' => 'required|max:100',
             'Battery' => 'required|max:100',
             'LongDescription' => 'nullable',
-            'ShortDescription' => 'nullable|max:256',
+            'ShortDescription' => 'nullable',
             'Price' => 'required',
             'Count' => 'required',
             'CategoryID' => 'required',
@@ -234,5 +234,37 @@ $re = DB::select("SELECT * FROM buyers as b INNER JOIN purchases as p ON p.Buyer
         $tmp = DB::select("SELECT max(Pdate) AS dt, SUM(Total) AS money, COUNT(p.PhoneID) AS pmax, ph.* FROM purchases AS p LEFT JOIN phones AS ph ON ph.ID = p.PhoneID WHERE Pdate BETWEEN ? AND ? GROUP BY p.PhoneID ORDER BY pmax DESC",[$request->input('frst'),$request->input('scnd')]);
 
         return view('reportPurchases',['in'=>$tmp,'ls'=>NULL]);
+    }
+    public function accessoriesPage(){
+        $tmp = DB::select("SELECT * FROM accessoriescategory");
+        return view('accessories',['categories'=>$tmp]);
+    }
+    public function accessories($id){
+        $tmp = DB::select("SELECT * FROM accessoriescategory WHERE ID = ?",[$id]);
+        $info = DB::select('SELECT * FROM '.$tmp[0]->ntable.';');
+        if(count($info) == 0) $info = null;
+        switch ($tmp[0]->ntable){
+            case 'chargers': return view('\chargers.chargersCatalog',['info'=>$info]);break;
+            case 'memorycards':  return view('\memorycards.memorycardCatalog',['info'=>$info]);break;
+            case 'powerbanks': return view('\powerbanks.powerbankCatalog',['info'=>$info]);break;
+            case 'cases': return view('\cases.casesCatalog',['info'=>$info]);break;
+            default: return null;
+        }
+    }
+    public function aboutCase($id){
+        $tmp = DB::select("SELECT * FROM cases WHERE ID = ?",[$id]);
+        return view('\cases.aboutCase',['info'=>$tmp[0]]);
+    }
+    public function aboutCharge($id){
+        $tmp = DB::select("SELECT * FROM chargers WHERE ID = ?",[$id]);
+        return view('\chargers.aboutCharge',['info'=>$tmp[0]]);
+    }
+    public function aboutMemoryCard($id){
+        $tmp = DB::select("SELECT * FROM memorycards WHERE ID = ?",[$id]);
+        return view('\memorycards.aboutMemoryCard',['info'=>$tmp[0]]);
+    }
+    public function aboutPowerBank($id){
+        $tmp = DB::select("SELECT * FROM powerbanks WHERE ID = ?",[$id]);
+        return view('\powerbanks.aboutPowerBank',['info'=>$tmp[0]]);
     }
 }

@@ -43,7 +43,13 @@ Route::prefix('admin')->middleware('auth')->group(function(){
 Route::post('/searchResult', [App\Http\Controllers\MainController::class, 'search'])->name('Search');
 Route::get('/about', [App\Http\Controllers\MainController::class, 'about'])->name('aboutPage');
 Route::post('/about', [App\Http\Controllers\MainController::class, 'report'])->name('addReport');
+Route::get('/accessories',[App\Http\Controllers\MainController::class, 'accessoriesPage'])->name('accessoriesCategory');
 
+Route::get('/accessories/{id}',[App\Http\Controllers\MainController::class, 'accessories'])->name('accessoriesPage');
+Route::get('/case/{id}',[App\Http\Controllers\MainController::class, 'aboutCase'])->name('aboutCase');
+Route::get('/charge/{id}',[App\Http\Controllers\MainController::class, 'aboutCharge'])->name('aboutCharge');
+Route::get('/memoryCard/{id}',[App\Http\Controllers\MainController::class, 'aboutMemoryCard'])->name('aboutMemoryCard');
+Route::get('/powerBank/{id}',[App\Http\Controllers\MainController::class, 'aboutPowerBank'])->name('aboutPowerBank');
 
 
 Route::get('/category', [App\Http\Controllers\MainController::class, 'category'])->name('categoryPage');

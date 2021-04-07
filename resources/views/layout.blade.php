@@ -22,6 +22,9 @@
                     <a class="nav-link" aria-current="page" href="/category">Категорії</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/accessories">Аксесуари</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/about">Про нас</a>
                 </li>
                 <li class="nav-item">
